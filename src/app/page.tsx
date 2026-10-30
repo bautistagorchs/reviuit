@@ -41,8 +41,8 @@ export default function Home() {
               ¿Con quién te anotás este cuatri?
             </h1>
             <p className="m-0 max-w-[560px] text-xl leading-normal text-body">
-              Lo que se dice en los grupos de WhatsApp, pero ordenado. Reseñas de profes y materias de alumnos
-              verificados, siempre anónimas.
+              Lo que se dice en los grupos de WhatsApp, pero ordenado. Reseñas de profes y materias escritas por
+              alumnos verificados.
             </p>
             <Form
               action="/explorar"

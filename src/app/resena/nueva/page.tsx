@@ -13,7 +13,7 @@ export default function NuevaResenaPage() {
       <PageMain className="pt-10">
         <h1 className="m-0 mb-2 text-[44px] font-extrabold tracking-[-0.01em] text-brand">Contá cómo fue</h1>
         <p className="m-0 mb-8 text-lg text-body">
-          Lo que escribas le ahorra un mal cuatri a alguien. Nadie va a saber que fuiste vos.
+          Lo que escribas le ahorra un mal cuatri a alguien.
         </p>
         <Suspense>
           <ResenaForm />

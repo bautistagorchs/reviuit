@@ -25,7 +25,7 @@ function resenasDe(c: Catedra): Resena[] {
   if (c.resenas) return c.resenas;
   if (!c.destacada) return [];
   const d = c.destacada;
-  return [{ meta: d.meta, cuatri: d.meta.replace("cursó ", ""), rating: d.rating, util: d.util, texto: `${d.bueno} ${d.ojo}`, tags: [] }];
+  return [{ autor: d.autor, meta: d.meta, cuatri: d.meta.replace("cursó ", ""), rating: d.rating, util: d.util, texto: `${d.bueno} ${d.ojo}`, tags: [] }];
 }
 
 export function CatedraTabs({ materia }: { materia: Materia }) {
@@ -120,7 +120,7 @@ export function CatedraTabs({ materia }: { materia: Materia }) {
 
           <p className="m-0 flex items-start gap-2.5 rounded-2xl border border-brand-shadow p-4 text-sm leading-[1.45] text-ink">
             <ShieldCheckIcon size={20} strokeWidth={2} className="flex-none text-brand" />
-            Todas las reseñas son de cuentas @udesa.edu.ar que cursaron con este profe. No mostramos nombres.
+            Todas las reseñas son de cuentas @udesa.edu.ar verificadas que cursaron con este profe.
           </p>
         </aside>
 
@@ -150,7 +150,7 @@ export function CatedraTabs({ materia }: { materia: Materia }) {
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <p className="m-0 flex items-center gap-2 text-sm font-semibold">
                     <VerifiedAvatar />
-                    Alumno verificado <span className="font-medium text-muted">· {r.meta}</span>
+                    {r.autor} <span className="font-medium text-muted">· {r.meta}</span>
                   </p>
                   <span className="inline-flex items-center gap-1 font-extrabold text-brand">
                     <StarIcon />

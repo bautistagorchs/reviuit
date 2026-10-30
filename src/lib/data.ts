@@ -3,6 +3,7 @@
 export type Anio = 1 | 2 | 3;
 
 export type Resena = {
+  autor: string;
   meta: string;
   rating: number;
   util: number;
@@ -12,6 +13,7 @@ export type Resena = {
 };
 
 export type Destacada = {
+  autor: string;
   bueno: string;
   ojo: string;
   rating: number;
@@ -66,8 +68,44 @@ export const materias: Materia[] = [
     resenas: 61,
     tags: ["TPs semanales", "Parcial práctico"],
     catedras: [
-      { slug: "duarte", profe: "Prof. Duarte", rating: "4,7", n: 24 },
-      { slug: "sosa", profe: "Prof. Sosa", rating: "4,2", n: 19 },
+      { slug: "duarte", profe: "Prof. Duarte", rating: "4,7", n: 24,
+        resenas: [
+          {
+            autor: "Camila Herrera",
+            meta: "1º año · cursó 1C 2026",
+            cuatri: "1C 2026",
+            rating: 5,
+            util: 31,
+            texto:
+              "Nunca había programado y terminé la materia con ganas de seguir. Explica cada concepto con ejemplos en vivo y no te hace sentir tonto por preguntar.",
+            tags: ["Explica claro", "Ideal para principiantes"],
+          },
+          {
+            autor: "Nicolás Benítez",
+            meta: "2º año · cursó 2C 2025",
+            cuatri: "2C 2025",
+            rating: 4,
+            util: 12,
+            texto:
+              "Los TPs semanales te mantienen al día, pero son bastantes. Si te atrasás uno, se te acumulan rápido.",
+            tags: ["TPs semanales"],
+          },
+        ],
+      },
+      { slug: "sosa", profe: "Prof. Sosa", rating: "4,2", n: 19,
+        resenas: [
+          {
+            autor: "Agustina Romero",
+            meta: "1º año · cursó 1C 2026",
+            cuatri: "1C 2026",
+            rating: 4,
+            util: 8,
+            texto:
+              "Va más rápido que Duarte, ideal si ya sabés algo de Python. El parcial práctico es justo: lo mismo que se vio en clase.",
+            tags: ["Ritmo rápido", "Parcial justo"],
+          },
+        ],
+      },
       { slug: "paz", profe: "Prof. Paz", rating: "4,1", n: 18 },
     ],
   },
@@ -79,8 +117,44 @@ export const materias: Materia[] = [
     resenas: 52,
     tags: ["Final escrito", "Mucha lectura"],
     catedras: [
-      { slug: "ibanez", profe: "Prof. Ibáñez", rating: "3,9", n: 30 },
-      { slug: "correa", profe: "Prof. Correa", rating: "3,2", n: 22 },
+      { slug: "ibanez", profe: "Prof. Ibáñez", rating: "3,9", n: 30,
+        resenas: [
+          {
+            autor: "Federico Castro",
+            meta: "1º año · cursó 1C 2026",
+            cuatri: "1C 2026",
+            rating: 4,
+            util: 19,
+            texto:
+              "Las clases son densas, pero sube las diapositivas y los ejercicios resueltos al campus. Leé el capítulo antes de cada clase y la vas a pasar bien.",
+            tags: ["Mucha lectura", "Material completo"],
+          },
+          {
+            autor: "Martina López",
+            meta: "2º año · cursó 2C 2025",
+            cuatri: "2C 2025",
+            rating: 3,
+            util: 7,
+            texto:
+              "El final escrito es muy largo y no alcanza el tiempo. Practicá con finales viejos cronometrando.",
+            tags: ["Final largo"],
+          },
+        ],
+      },
+      { slug: "correa", profe: "Prof. Correa", rating: "3,2", n: 22,
+        resenas: [
+          {
+            autor: "Julián Acosta",
+            meta: "1º año · cursó 1C 2026",
+            cuatri: "1C 2026",
+            rating: 3,
+            util: 10,
+            texto:
+              "Sabe un montón, pero las clases son muy teóricas y cuesta bajarlo a los ejercicios. Las prácticas con ayudantes salvan.",
+            tags: ["Muy teórica", "Buenos ayudantes"],
+          },
+        ],
+      },
     ],
   },
   {
@@ -104,7 +178,20 @@ export const materias: Materia[] = [
     resenas: 54,
     tags: ["Asistencia obligatoria", "Dos parciales"],
     catedras: [
-      { slug: "benitez", profe: "Prof. Benítez", rating: "3,7", n: 28 },
+      { slug: "benitez", profe: "Prof. Benítez", rating: "3,7", n: 28,
+        resenas: [
+          {
+            autor: "Florencia Giménez",
+            meta: "1º año · cursó 1C 2026",
+            cuatri: "1C 2026",
+            rating: 4,
+            util: 14,
+            texto:
+              "Toma asistencia, pero vale la pena ir: resuelve en el pizarrón exactamente el tipo de ejercicio que después toma.",
+            tags: ["Toma asistencia", "Dos parciales"],
+          },
+        ],
+      },
       { slug: "quiroga", profe: "Prof. Quiroga", rating: "3,1", n: 26 },
     ],
   },
@@ -115,7 +202,30 @@ export const materias: Materia[] = [
     rating: "4,2",
     resenas: 33,
     tags: ["Ensayos", "Debate en clase"],
-    catedras: [{ slug: "aguirre", profe: "Prof. Aguirre", rating: "4,2", n: 33 }],
+    catedras: [{ slug: "aguirre", profe: "Prof. Aguirre", rating: "4,2", n: 33,
+        resenas: [
+          {
+            autor: "Bruno Sánchez",
+            meta: "1º año · cursó 2C 2025",
+            cuatri: "2C 2025",
+            rating: 5,
+            util: 22,
+            texto:
+              "La materia que más me cambió la forma de pensar. Los debates en clase son de verdad y las devoluciones de los ensayos son detalladas.",
+            tags: ["Debate en clase", "Buenas devoluciones"],
+          },
+          {
+            autor: "Catalina Díaz",
+            meta: "1º año · cursó 1C 2026",
+            cuatri: "1C 2026",
+            rating: 4,
+            util: 9,
+            texto:
+              "Hay que escribir mucho: un ensayo cada tres semanas. Si te gusta escribir, la disfrutás.",
+            tags: ["Ensayos"],
+          },
+        ],
+      }],
   },
   {
     slug: "historia-economica",
@@ -165,6 +275,7 @@ export const materias: Materia[] = [
           loQueSeRepite: "Exige, pero te enseña de verdad",
         },
         destacada: {
+          autor: "Sofía Martínez",
           rating: 5,
           bueno: "Usa datos reales en cada clase y los TPs te preparan para el parcial.",
           ojo: "Toma asistencia siempre y cuenta para la nota.",
@@ -173,6 +284,7 @@ export const materias: Materia[] = [
         },
         resenas: [
           {
+            autor: "Sofía Martínez",
             meta: "2º año · cursó 1C 2026",
             cuatri: "1C 2026",
             rating: 5,
@@ -182,6 +294,7 @@ export const materias: Materia[] = [
             tags: ["Explica claro", "Exigente"],
           },
           {
+            autor: "Tomás Gutiérrez",
             meta: "3º año · cursó 2C 2025",
             cuatri: "2C 2025",
             rating: 4,
@@ -191,6 +304,7 @@ export const materias: Materia[] = [
             tags: ["Toma asistencia", "Parcial largo"],
           },
           {
+            autor: "Valentina Ruiz",
             meta: "2º año · cursó 1C 2026",
             cuatri: "1C 2026",
             rating: 4,
@@ -200,6 +314,7 @@ export const materias: Materia[] = [
             tags: ["Buenos ayudantes"],
           },
           {
+            autor: "Joaquín Pereyra",
             meta: "2º año · cursó 2C 2025",
             cuatri: "2C 2025",
             rating: 3,
@@ -223,6 +338,7 @@ export const materias: Materia[] = [
           loQueSeRepite: "Más teórica, el oral define",
         },
         destacada: {
+          autor: "Lucía Fernández",
           rating: 4,
           bueno: "Muy flexible con las entregas y responde todas las dudas por mail.",
           ojo: "El final oral pesa mucho; preparalo con tiempo.",
@@ -244,6 +360,7 @@ export const materias: Materia[] = [
           loQueSeRepite: "Cátedra nueva, buena primera impresión",
         },
         destacada: {
+          autor: "Mateo Álvarez",
           rating: 4,
           bueno: "Clases cortas y al grano, con ejercicios resueltos en el campus.",
           ojo: "Es su primer año dictando, todavía ajusta el programa.",
@@ -293,7 +410,7 @@ export function normalizar(s: string) {
 }
 
 /** Usuario de ejemplo hasta que exista el login con @udesa.edu.ar. */
-export const usuarioDemo = { anio: 2 as Anio };
+export const usuarioDemo = { nombre: "Martina López", anio: 2 as Anio };
 
 export const opcionesEvaluacion = [
   "Parciales escritos",

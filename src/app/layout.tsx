@@ -11,7 +11,7 @@ const hanken = Hanken_Grotesk({
 export const metadata: Metadata = {
   title: "Reviuit",
   description:
-    "Reseñas de profes y materias de UdeSA, escritas por alumnos verificados y siempre anónimas.",
+    "Reseñas de profes y materias de UdeSA, escritas por alumnos verificados.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

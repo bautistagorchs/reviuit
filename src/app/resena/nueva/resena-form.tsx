@@ -197,7 +197,7 @@ export function ResenaForm() {
             />
           </label>
           <p className="m-0 text-sm text-muted">
-            Más contexto le da más confianza a quien lee. Menos contexto, más anonimato. Vos elegís.
+            Tu nombre siempre aparece en la reseña. El resto del contexto lo elegís vos.
           </p>
         </Paso>
 
@@ -223,7 +223,7 @@ export function ResenaForm() {
           <div className="flex items-center justify-between gap-3">
             <p className="m-0 flex items-center gap-2 text-sm font-semibold">
               <VerifiedAvatar size={30} />
-              Alumno verificado
+              {usuarioDemo.nombre}
             </p>
             <span className="font-extrabold text-brand">★ {rating || "–"}</span>
           </div>
@@ -244,11 +244,10 @@ export function ResenaForm() {
           )}
         </article>
         <section className="flex flex-col gap-2.5 rounded-[18px] bg-brand-tint p-5">
-          <p className="m-0 font-extrabold text-brand">Lo que nunca se muestra</p>
+          <p className="m-0 font-extrabold text-brand">Lo que no se muestra</p>
           <ul className="m-0 flex list-disc flex-col gap-1.5 pl-5 text-[15px] leading-[1.4]">
-            <li>Tu nombre y tu mail</li>
-            <li>Tus otras reseñas (no se pueden vincular)</li>
-            <li>Nada de esto le llega a la facultad ni al profe</li>
+            <li>Tu mail</li>
+            <li>Tu legajo y tus notas</li>
           </ul>
         </section>
       </aside>

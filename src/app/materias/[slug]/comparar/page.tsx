@@ -139,7 +139,7 @@ export default async function CompararPage(props: PageProps<"/materias/[slug]/co
               <h2 className="m-0 text-[28px] font-extrabold text-brand">La reseña más útil de cada una</h2>
               <p className="m-0 flex items-center gap-1.5 text-sm text-muted">
                 <ShieldCheckIcon size={15} className="text-brand" />
-                Solo alumnos verificados. Sin nombres.
+                Solo alumnos verificados con mail @udesa.edu.ar.
               </p>
             </div>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
@@ -159,7 +159,7 @@ export default async function CompararPage(props: PageProps<"/materias/[slug]/co
                       <p className="m-0 text-base leading-normal">{d.ojo}</p>
                     </div>
                     <p className="m-0 border-t border-line-soft pt-3 text-[13px] text-muted">
-                      Alumno verificado · {d.meta} · {d.util} les sirvió
+                      {d.autor} · {d.meta} · {d.util} les sirvió
                     </p>
                   </article>
                 );

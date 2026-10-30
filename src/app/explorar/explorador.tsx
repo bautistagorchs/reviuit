@@ -128,7 +128,7 @@ export function Explorador() {
           <div className="flex flex-col gap-2.5 rounded-2xl bg-brand-tint p-[18px]">
             <p className="m-0 font-bold text-brand">¿Ya cursaste alguna?</p>
             <p className="m-0 text-sm leading-[1.45] text-ink">
-              Tu reseña es anónima y le ahorra un mal cuatri a alguien.
+              Tu reseña le ahorra un mal cuatri a alguien.
             </p>
             <Link href="/resena/nueva" className="self-start text-[15px] font-bold">
               Escribir una →
