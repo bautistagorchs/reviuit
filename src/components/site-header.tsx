@@ -67,7 +67,7 @@ export function SiteHeader({ search, cta, badge, active, cancelHref }: SiteHeade
               Explorar
             </Link>
             <Link
-              href="#"
+              href="/mis-resenas"
               aria-current={active === "mis-resenas" ? "page" : undefined}
               className={active === "mis-resenas" ? navLinkActive : navLink}
             >

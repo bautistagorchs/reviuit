@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ShieldCheckIcon, StarIcon, ThumbUpIcon } from "@/components/icons";
 import { Chip, Eyebrow, VerifiedAvatar } from "@/components/ui";
 import type { Catedra, Materia, Resena } from "@/lib/data";
+import { borrarResena, useResenasLocales } from "@/lib/resenas-locales";
 
 type Orden = "utiles" | "recientes" | "2026";
 
@@ -29,7 +30,11 @@ function resenasDe(c: Catedra): Resena[] {
 }
 
 export function CatedraTabs({ materia }: { materia: Materia }) {
-  const inicial = useSearchParams().get("catedra");
+  const params = useSearchParams();
+  const inicial = params.get("catedra");
+  const nueva = params.get("nueva");
+  const locales = useResenasLocales().filter((r) => r.materiaSlug === materia.slug);
+  const totalDe = (c: Catedra) => c.n + locales.filter((r) => r.catedraSlug === c.slug).length;
   const [activa, setActiva] = useState(
     materia.catedras.find((c) => c.slug === inicial)?.slug ?? materia.catedras[0].slug,
   );
@@ -37,10 +42,23 @@ export function CatedraTabs({ materia }: { materia: Materia }) {
   const [votadas, setVotadas] = useState<Set<string>>(new Set());
 
   const catedra = materia.catedras.find((c) => c.slug === activa) ?? materia.catedras[0];
-  const resenas = resenasDe(catedra)
-    .map((r, i) => ({ ...r, id: `${catedra.slug}-${i}` }))
-    .filter((r) => orden !== "2026" || r.cuatri.endsWith("2026"))
-    .sort((a, b) => (orden === "recientes" ? cuatriKey(b.cuatri) - cuatriKey(a.cuatri) : b.util - a.util));
+  const propias = locales.filter((r) => r.catedraSlug === catedra.slug).map((r) => ({ ...r, propia: true }));
+  const resenas = [
+    // Las reseñas propias van siempre primero, de la más nueva a la más vieja.
+    ...propias,
+    ...resenasDe(catedra)
+      .map((r, i) => ({ ...r, id: `${catedra.slug}-${i}`, propia: false }))
+      .sort((a, b) => (orden === "recientes" ? cuatriKey(b.cuatri) - cuatriKey(a.cuatri) : b.util - a.util)),
+  ].filter((r) => orden !== "2026" || r.cuatri.endsWith("2026"));
+  const recienPublicada = propias.some((r) => r.id === nueva);
+
+  useEffect(() => {
+    if (recienPublicada) document.getElementById(`resena-${nueva}`)?.scrollIntoView({ block: "center" });
+  }, [recienPublicada, nueva]);
+
+  const borrar = (id: string) => {
+    if (window.confirm("¿Borrar tu reseña? No se puede deshacer.")) borrarResena(id);
+  };
 
   const toggleVoto = (id: string) =>
     setVotadas((prev) => {
@@ -67,7 +85,7 @@ export function CatedraTabs({ materia }: { materia: Materia }) {
                 sel ? "border-brand font-bold text-brand" : "border-transparent font-semibold text-body hover:text-brand"
               }`}
             >
-              {c.profe} <span className="font-medium text-muted">· {c.n}</span>
+              {c.profe} <span className="font-medium text-muted">· {totalDe(c)}</span>
             </button>
           );
         })}
@@ -84,7 +102,7 @@ export function CatedraTabs({ materia }: { materia: Materia }) {
                 <p className="m-0 mb-1 text-base font-bold">
                   {catedra.resumen?.label ?? (catedra.rating ? "Promedio general" : "Pocos datos todavía")}
                 </p>
-                <p className="m-0 text-sm text-muted">{catedra.resumen?.detalle ?? `${catedra.n} reseñas`}</p>
+                <p className="m-0 text-sm text-muted">{catedra.resumen?.detalle ?? `${totalDe(catedra)} reseñas`}</p>
               </div>
             </div>
             {catedra.resumen && (
@@ -143,14 +161,30 @@ export function CatedraTabs({ materia }: { materia: Materia }) {
             ))}
           </div>
 
+          {recienPublicada && (
+            <p role="status" className="m-0 rounded-2xl bg-brand-tint px-5 py-4 font-semibold text-brand">
+              ¡Listo! Tu reseña ya está publicada. Gracias por contar cómo fue.
+            </p>
+          )}
+
           {resenas.map((r) => {
             const votada = votadas.has(r.id);
             return (
-              <article key={r.id} className="flex flex-col gap-3.5 rounded-[20px] bg-paper p-6">
+              <article
+                key={r.id}
+                id={`resena-${r.id}`}
+                className={`flex scroll-mt-6 flex-col gap-3.5 rounded-[20px] bg-paper p-6 ${
+                  r.propia && r.id === nueva ? "border-2 border-brand shadow-offset" : ""
+                }`}
+              >
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                  <p className="m-0 flex items-center gap-2 text-sm font-semibold">
+                  <p className="m-0 flex flex-wrap items-center gap-2 text-sm font-semibold">
                     <VerifiedAvatar />
-                    {r.autor} <span className="font-medium text-muted">· {r.meta}</span>
+                    {r.autor}
+                    {r.meta && <span className="font-medium text-muted">· {r.meta}</span>}
+                    {r.propia && (
+                      <span className="rounded-full bg-brand px-2 py-0.5 text-xs font-bold text-white">TU RESEÑA</span>
+                    )}
                   </p>
                   <span className="inline-flex items-center gap-1 font-extrabold text-brand">
                     <StarIcon />
@@ -158,7 +192,7 @@ export function CatedraTabs({ materia }: { materia: Materia }) {
                     {r.rating}
                   </span>
                 </div>
-                <p className="m-0 text-[17px] leading-[1.55]">{r.texto}</p>
+                <p className="m-0 text-[17px] leading-[1.55] whitespace-pre-line">{r.texto}</p>
                 {r.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1.5">
                     {r.tags.map((t) => (
@@ -179,7 +213,16 @@ export function CatedraTabs({ materia }: { materia: Materia }) {
                     <ThumbUpIcon />
                     Me sirvió · {r.util + (votada ? 1 : 0)}
                   </button>
-                  <button className="cursor-pointer bg-transparent p-2.5 text-sm text-muted underline">Reportar</button>
+                  {r.propia ? (
+                    <button
+                      onClick={() => borrar(r.id)}
+                      className="cursor-pointer bg-transparent p-2.5 text-sm text-muted underline"
+                    >
+                      Borrar
+                    </button>
+                  ) : (
+                    <button className="cursor-pointer bg-transparent p-2.5 text-sm text-muted underline">Reportar</button>
+                  )}
                 </div>
               </article>
             );

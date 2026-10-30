@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { type FormEvent, type ReactNode, useState } from "react";
 import { InfoIcon, StarIcon } from "@/components/icons";
 import { Eyebrow, VerifiedAvatar } from "@/components/ui";
 import { anioLabel, cuatrimestres, materias, opcionesEvaluacion, usuarioDemo } from "@/lib/data";
+import { guardarResena } from "@/lib/resenas-locales";
 
 const etiquetas = ["", "Mala", "Floja", "Bien", "Muy buena", "Excelente"];
 
@@ -21,6 +21,7 @@ function Paso({ titulo, className = "", children }: { titulo: string; className?
 }
 
 export function ResenaForm() {
+  const router = useRouter();
   const params = useSearchParams();
   const materiaInicial = materias.find((m) => m.slug === params.get("materia")) ?? materias[0];
 
@@ -34,15 +35,16 @@ export function ResenaForm() {
   const [texto, setTexto] = useState("");
   const [showAnio, setShowAnio] = useState(true);
   const [showCuatri, setShowCuatri] = useState(true);
-  const [enviada, setEnviada] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const materia = materias.find((m) => m.slug === materiaSlug) ?? materias[0];
   const catedra = materia.catedras.find((c) => c.slug === catedraSlug) ?? materia.catedras[0];
 
-  const meta = [`${materia.nombre} · ${catedra.profe}`];
-  if (showAnio) meta.push(anioLabel(usuarioDemo.anio));
-  if (showCuatri) meta.push(`cursó ${cuatri}`);
+  // Lo que se muestra junto al nombre en la página de la materia.
+  const contexto: string[] = [];
+  if (showAnio) contexto.push(anioLabel(usuarioDemo.anio));
+  if (showCuatri) contexto.push(`cursó ${cuatri}`);
+  const meta = [`${materia.nombre} · ${catedra.profe}`, ...contexto];
 
   const cambiarMateria = (slug: string) => {
     const m = materias.find((x) => x.slug === slug) ?? materias[0];
@@ -63,24 +65,18 @@ export function ResenaForm() {
     if (!rating) return setError("Elegí un puntaje de 1 a 5.");
     if (texto.trim().length < 20) return setError("Contanos un poco más: al menos 20 caracteres.");
     setError(null);
-    // TODO: enviar al backend cuando exista.
-    setEnviada(true);
+    const resena = guardarResena({
+      materiaSlug: materia.slug,
+      catedraSlug: catedra.slug,
+      autor: usuarioDemo.nombre,
+      meta: contexto.join(" · "),
+      cuatri,
+      rating,
+      texto: texto.trim(),
+      tags: opcionesEvaluacion.filter((op) => evaluacion.has(op)),
+    });
+    router.push(`/materias/${materia.slug}?catedra=${catedra.slug}&nueva=${resena.id}`);
   };
-
-  if (enviada) {
-    return (
-      <div className="flex max-w-[640px] flex-col gap-4 rounded-[20px] border-2 border-brand bg-paper p-8 shadow-offset">
-        <Eyebrow>RESEÑA PUBLICADA</Eyebrow>
-        <p className="m-0 text-2xl font-extrabold text-brand">¡Gracias por contar cómo fue!</p>
-        <p className="m-0 text-base text-body">
-          Tu reseña de {materia.nombre} con {catedra.profe} ya está visible. Podés editarla o borrarla cuando quieras.
-        </p>
-        <Link href={`/materias/${materia.slug}?catedra=${catedra.slug}`} className="self-start font-bold">
-          Ver la materia →
-        </Link>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-wrap items-start gap-8">
@@ -213,7 +209,7 @@ export function ResenaForm() {
           >
             Publicar reseña
           </button>
-          <span className="text-sm text-muted">Podés editarla o borrarla cuando quieras.</span>
+          <span className="text-sm text-muted">Podés borrarla cuando quieras desde Mis reseñas.</span>
         </div>
       </form>
 
