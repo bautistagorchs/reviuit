@@ -51,6 +51,7 @@ export type Materia = {
   /** Versión corta para chips y sugerencias. */
   nombreCorto?: string;
   anio: Anio;
+  carreras: Carrera[];
   rating: string;
   resenas: number;
   tags: string[];
@@ -64,6 +65,7 @@ export const materias: Materia[] = [
     slug: "programacion-i",
     nombre: "Programación I",
     anio: 1,
+    carreras: ["Negocios Digitales"],
     rating: "4,4",
     resenas: 61,
     tags: ["TPs semanales", "Parcial práctico"],
@@ -113,6 +115,7 @@ export const materias: Materia[] = [
     slug: "microeconomia",
     nombre: "Microeconomía",
     anio: 1,
+    carreras: ["Economía", "Administración", "Negocios Digitales"],
     rating: "3,6",
     resenas: 52,
     tags: ["Final escrito", "Mucha lectura"],
@@ -162,6 +165,7 @@ export const materias: Materia[] = [
     nombre: "Contabilidad Financiera",
     nombreCorto: "Contabilidad",
     anio: 1,
+    carreras: ["Administración", "Negocios Digitales"],
     rating: "3,9",
     resenas: 27,
     tags: ["Ejercicios en clase"],
@@ -174,6 +178,7 @@ export const materias: Materia[] = [
     slug: "matematica-i",
     nombre: "Matemática I",
     anio: 1,
+    carreras: ["Economía", "Administración", "Negocios Digitales"],
     rating: "3,4",
     resenas: 54,
     tags: ["Asistencia obligatoria", "Dos parciales"],
@@ -199,6 +204,7 @@ export const materias: Materia[] = [
     slug: "pensamiento-critico",
     nombre: "Pensamiento Crítico",
     anio: 1,
+    carreras: ["Economía", "Administración", "Negocios Digitales"],
     rating: "4,2",
     resenas: 33,
     tags: ["Ensayos", "Debate en clase"],
@@ -231,6 +237,7 @@ export const materias: Materia[] = [
     slug: "historia-economica",
     nombre: "Historia Económica",
     anio: 1,
+    carreras: ["Economía", "Administración"],
     rating: "3,8",
     resenas: 25,
     tags: ["Final oral"],
@@ -243,6 +250,7 @@ export const materias: Materia[] = [
     slug: "estadistica-aplicada",
     nombre: "Estadística Aplicada",
     anio: 2,
+    carreras: ["Economía", "Administración", "Negocios Digitales"],
     rating: "4,1",
     resenas: 38,
     tags: ["2 parciales", "TP grupal con R"],
@@ -388,7 +396,8 @@ export const sugerenciasBusqueda = [
 
 export const cuatrimestres = ["1C 2026", "2C 2025", "1C 2025"];
 
-export const carreras = ["Negocios Digitales", "Administración", "Economía"];
+export const carreras = ["Negocios Digitales", "Administración", "Economía"] as const;
+export type Carrera = (typeof carreras)[number];
 
 export function getMateria(slug: string) {
   return materias.find((m) => m.slug === slug);

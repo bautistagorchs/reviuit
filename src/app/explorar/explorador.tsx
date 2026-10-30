@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Chip, Eyebrow, RatingPill } from "@/components/ui";
-import { type Anio, anioLabel, carreras, materias, normalizar } from "@/lib/data";
+import { type Anio, type Carrera, anioLabel, carreras, materias, normalizar } from "@/lib/data";
 
 const anios: Anio[] = [1, 2, 3];
 type Orden = "resenas" | "rating" | "az";
@@ -20,13 +20,16 @@ export function Explorador() {
   const [anio, setAnio] = useState<Anio>(1);
   const [vista, setVista] = useState<Vista>("materias");
   const [orden, setOrden] = useState<Orden>("resenas");
+  const [carrera, setCarrera] = useState<Carrera | "">("");
+
+  const deCarrera = (m: (typeof materias)[number]) => !carrera || m.carreras.includes(carrera);
 
   // Con búsqueda activa se busca en todos los años; sin búsqueda, en el año elegido.
   const coincide = (m: (typeof materias)[number]) =>
     !q || normalizar(m.nombre).includes(q) || m.catedras.some((c) => normalizar(c.profe).includes(q));
 
   const lista = materias
-    .filter((m) => (q ? coincide(m) : m.anio === anio))
+    .filter((m) => (q ? coincide(m) : m.anio === anio) && deCarrera(m))
     .sort((a, b) => {
       if (orden === "az") return a.nombre.localeCompare(b.nombre, "es");
       if (orden === "rating") return ratingNum(b.rating) - ratingNum(a.rating);
@@ -78,7 +81,7 @@ export function Explorador() {
             <legend className="mb-2.5 text-[13px] font-bold tracking-[0.18em] text-brand">AÑO</legend>
             {anios.map((a) => {
               const activo = !q && a === anio;
-              const total = materias.filter((m) => m.anio === a).length;
+              const total = materias.filter((m) => m.anio === a && deCarrera(m)).length;
               return (
                 <button
                   key={a}
@@ -103,10 +106,17 @@ export function Explorador() {
             <label htmlFor="carrera" className="text-[13px] font-bold tracking-[0.18em] text-brand">
               CARRERA
             </label>
-            <select id="carrera" className={selectClass}>
-              <option>Todas las carreras</option>
+            <select
+              id="carrera"
+              value={carrera}
+              onChange={(e) => setCarrera(e.target.value as Carrera | "")}
+              className={selectClass}
+            >
+              <option value="">Todas las carreras</option>
               {carreras.map((c) => (
-                <option key={c}>{c}</option>
+                <option key={c} value={c}>
+                  {c}
+                </option>
               ))}
             </select>
           </div>
