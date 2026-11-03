@@ -13,13 +13,17 @@ const errores: Record<string, string> = {
   AccessDenied: `Solo pueden entrar cuentas @${dominioPermitido}. Probá de nuevo con tu mail de la facultad.`,
   Configuration:
     process.env.NODE_ENV === "development"
-      ? "Falta configurar el login: revisá AUTH_SECRET, AUTH_GOOGLE_ID y AUTH_GOOGLE_SECRET en .env.local y reiniciá npm run dev. El detalle del error está en la terminal."
+      ? "Falta configurar el login: revisar AUTH_SECRET, AUTH_GOOGLE_ID y AUTH_GOOGLE_SECRET en .env.local y reiniciá npm run dev. El detalle del error está en la terminal."
       : "El login con Google todavía no está configurado en este servidor.",
 };
 
 // Solo rutas internas, para no redirigir a otro sitio después del login.
 function rutaSegura(valor: string | string[] | undefined) {
-  return typeof valor === "string" && valor.startsWith("/") && !valor.startsWith("//") ? valor : "/";
+  return typeof valor === "string" &&
+    valor.startsWith("/") &&
+    !valor.startsWith("//")
+    ? valor
+    : "/";
 }
 
 export default function EntrarPage(props: PageProps<"/entrar">) {
@@ -35,13 +39,17 @@ export default function EntrarPage(props: PageProps<"/entrar">) {
   );
 }
 
-async function Entrar({ searchParams }: Pick<PageProps<"/entrar">, "searchParams">) {
+async function Entrar({
+  searchParams,
+}: Pick<PageProps<"/entrar">, "searchParams">) {
   const params = await searchParams;
   const volverA = rutaSegura(params.callbackUrl);
   if (await getUsuario()) redirect(volverA);
 
   const codigo = typeof params.error === "string" ? params.error : null;
-  const error = codigo ? (errores[codigo] ?? "No pudimos completar el login. Probá de nuevo.") : null;
+  const error = codigo
+    ? (errores[codigo] ?? "No pudimos completar el login. Probá de nuevo.")
+    : null;
 
   async function entrarConGoogle() {
     "use server";
@@ -51,16 +59,24 @@ async function Entrar({ searchParams }: Pick<PageProps<"/entrar">, "searchParams
   return (
     <section className="flex w-full max-w-[480px] flex-col gap-6 rounded-[20px] border-2 border-brand bg-paper p-8 shadow-offset">
       <div className="flex flex-col gap-3">
-        <p className="m-0 text-[13px] font-bold tracking-[0.22em] text-brand">SOLO ALUMNOS DE UDESA</p>
-        <h1 className="m-0 text-[40px] leading-[1.05] font-extrabold tracking-[-0.01em] text-brand">Entrá a Reviuit</h1>
+        <p className="m-0 text-[13px] font-bold tracking-[0.22em] text-brand">
+          SOLO ALUMNOS DE UDESA
+        </p>
+        <h1 className="m-0 text-[40px] leading-[1.05] font-extrabold tracking-[-0.01em] text-brand">
+          Entrá a Reviuit
+        </h1>
         <p className="m-0 text-[17px] leading-normal text-body">
-          Usá tu cuenta @{dominioPermitido === "*" ? "de Google" : dominioPermitido} para escribir reseñas y ver las
-          tuyas.
+          Usá tu cuenta @
+          {dominioPermitido === "*" ? "de Google" : dominioPermitido} para
+          escribir reseñas y ver las tuyas.
         </p>
       </div>
 
       {error && (
-        <p role="alert" className="m-0 rounded-2xl bg-cream px-4 py-3 text-[15px] font-semibold text-warn">
+        <p
+          role="alert"
+          className="m-0 rounded-2xl bg-cream px-4 py-3 text-[15px] font-semibold text-warn"
+        >
           {error}
         </p>
       )}
@@ -82,9 +98,13 @@ async function Entrar({ searchParams }: Pick<PageProps<"/entrar">, "searchParams
       </form>
 
       <p className="m-0 flex items-start gap-2.5 text-sm leading-[1.45] text-body">
-        <ShieldCheckIcon size={18} strokeWidth={2} className="mt-px flex-none text-brand" />
-        Solo usamos tu nombre y tu mail para verificar que sos alumno. Nunca publicamos en tu nombre sin que escribas
-        una reseña.
+        <ShieldCheckIcon
+          size={18}
+          strokeWidth={2}
+          className="mt-px flex-none text-brand"
+        />
+        Solo usamos tu nombre y tu mail para verificar que sos alumno. Nunca
+        publicamos en tu nombre sin que escribas una reseña.
       </p>
     </section>
   );
