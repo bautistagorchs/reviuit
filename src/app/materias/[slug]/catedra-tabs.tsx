@@ -29,7 +29,7 @@ function resenasDe(c: Catedra): Resena[] {
   return [{ autor: d.autor, meta: d.meta, cuatri: d.meta.replace("cursó ", ""), rating: d.rating, util: d.util, texto: `${d.bueno} ${d.ojo}`, tags: [] }];
 }
 
-export function CatedraTabs({ materia }: { materia: Materia }) {
+export function CatedraTabs({ materia, usuarioEmail }: { materia: Materia; usuarioEmail: string | null }) {
   const params = useSearchParams();
   const inicial = params.get("catedra");
   const nueva = params.get("nueva");
@@ -42,10 +42,14 @@ export function CatedraTabs({ materia }: { materia: Materia }) {
   const [votadas, setVotadas] = useState<Set<string>>(new Set());
 
   const catedra = materia.catedras.find((c) => c.slug === activa) ?? materia.catedras[0];
-  const propias = locales.filter((r) => r.catedraSlug === catedra.slug).map((r) => ({ ...r, propia: true }));
+  const deEstaCatedra = locales
+    .filter((r) => r.catedraSlug === catedra.slug)
+    .map((r) => ({ ...r, propia: !!usuarioEmail && r.autorEmail === usuarioEmail }));
+  const propias = deEstaCatedra.filter((r) => r.propia);
   const resenas = [
-    // Las reseñas propias van siempre primero, de la más nueva a la más vieja.
+    // Las reseñas escritas en este navegador van primero (las tuyas antes), de la más nueva a la más vieja.
     ...propias,
+    ...deEstaCatedra.filter((r) => !r.propia),
     ...resenasDe(catedra)
       .map((r, i) => ({ ...r, id: `${catedra.slug}-${i}`, propia: false }))
       .sort((a, b) => (orden === "recientes" ? cuatriKey(b.cuatri) - cuatriKey(a.cuatri) : b.util - a.util)),

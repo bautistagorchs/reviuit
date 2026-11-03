@@ -8,8 +8,8 @@ import { borrarResena, useResenasLocales } from "@/lib/resenas-locales";
 
 const fecha = new Intl.DateTimeFormat("es-AR", { day: "numeric", month: "long", year: "numeric" });
 
-export function MisResenas() {
-  const resenas = useResenasLocales();
+export function MisResenas({ usuarioEmail }: { usuarioEmail: string }) {
+  const resenas = useResenasLocales().filter((r) => r.autorEmail === usuarioEmail);
 
   const borrar = (id: string) => {
     if (window.confirm("¿Borrar tu reseña? No se puede deshacer.")) borrarResena(id);

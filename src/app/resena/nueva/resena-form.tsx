@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { type FormEvent, type ReactNode, useState } from "react";
 import { InfoIcon, StarIcon } from "@/components/icons";
 import { Eyebrow, VerifiedAvatar } from "@/components/ui";
-import { anioLabel, cuatrimestres, materias, opcionesEvaluacion, usuarioDemo } from "@/lib/data";
+import { aniosCarrera, anioLabel, cuatrimestres, materias, opcionesEvaluacion } from "@/lib/data";
 import { guardarResena } from "@/lib/resenas-locales";
 
 const etiquetas = ["", "Mala", "Floja", "Bien", "Muy buena", "Excelente"];
@@ -20,7 +20,7 @@ function Paso({ titulo, className = "", children }: { titulo: string; className?
   );
 }
 
-export function ResenaForm() {
+export function ResenaForm({ usuario }: { usuario: { nombre: string; email: string } }) {
   const router = useRouter();
   const params = useSearchParams();
   const materiaInicial = materias.find((m) => m.slug === params.get("materia")) ?? materias[0];
@@ -33,7 +33,7 @@ export function ResenaForm() {
   const [rating, setRating] = useState(0);
   const [evaluacion, setEvaluacion] = useState<Set<string>>(new Set());
   const [texto, setTexto] = useState("");
-  const [showAnio, setShowAnio] = useState(true);
+  const [anio, setAnio] = useState<number | null>(null);
   const [showCuatri, setShowCuatri] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,7 +42,7 @@ export function ResenaForm() {
 
   // Lo que se muestra junto al nombre en la página de la materia.
   const contexto: string[] = [];
-  if (showAnio) contexto.push(anioLabel(usuarioDemo.anio));
+  if (anio) contexto.push(anioLabel(anio));
   if (showCuatri) contexto.push(`cursó ${cuatri}`);
   const meta = [`${materia.nombre} · ${catedra.profe}`, ...contexto];
 
@@ -68,7 +68,8 @@ export function ResenaForm() {
     const resena = guardarResena({
       materiaSlug: materia.slug,
       catedraSlug: catedra.slug,
-      autor: usuarioDemo.nombre,
+      autor: usuario.nombre,
+      autorEmail: usuario.email,
       meta: contexto.join(" · "),
       cuatri,
       rating,
@@ -172,15 +173,20 @@ export function ResenaForm() {
         </Paso>
 
         <Paso titulo="4 · QUÉ MOSTRAMOS DE VOS" className="flex flex-col gap-3.5">
-          <label className="flex cursor-pointer items-center justify-between gap-4 text-base font-semibold">
+          <label className="flex items-center justify-between gap-4 text-base font-semibold">
             Tu año de carrera
-            <input
-              type="checkbox"
-              role="switch"
-              checked={showAnio}
-              onChange={() => setShowAnio((v) => !v)}
-              className="size-[22px] accent-brand"
-            />
+            <select
+              value={anio ?? ""}
+              onChange={(e) => setAnio(e.target.value ? Number(e.target.value) : null)}
+              className={selectClass}
+            >
+              <option value="">No mostrarlo</option>
+              {aniosCarrera.map((a) => (
+                <option key={a} value={a}>
+                  {anioLabel(a)}
+                </option>
+              ))}
+            </select>
           </label>
           <label className="flex cursor-pointer items-center justify-between gap-4 text-base font-semibold">
             El cuatrimestre que cursaste
@@ -219,7 +225,7 @@ export function ResenaForm() {
           <div className="flex items-center justify-between gap-3">
             <p className="m-0 flex items-center gap-2 text-sm font-semibold">
               <VerifiedAvatar size={30} />
-              {usuarioDemo.nombre}
+              {usuario.nombre}
             </p>
             <span className="font-extrabold text-brand">★ {rating || "–"}</span>
           </div>

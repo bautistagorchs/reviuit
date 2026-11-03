@@ -394,7 +394,7 @@ export function getMateria(slug: string) {
   return materias.find((m) => m.slug === slug);
 }
 
-export function anioLabel(anio: Anio) {
+export function anioLabel(anio: number) {
   return `${anio}º año`;
 }
 
@@ -409,8 +409,7 @@ export function normalizar(s: string) {
     .replace(/[̀-ͯ]/g, "");
 }
 
-/** Usuario de ejemplo hasta que exista el login con @udesa.edu.ar. */
-export const usuarioDemo = { nombre: "Martina López", anio: 2 as Anio };
+export const aniosCarrera = [1, 2, 3, 4, 5];
 
 export const opcionesEvaluacion = [
   "Parciales escritos",

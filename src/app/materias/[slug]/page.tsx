@@ -5,7 +5,8 @@ import { Suspense } from "react";
 import { PlusIcon } from "@/components/icons";
 import { SiteHeader } from "@/components/site-header";
 import { PageMain } from "@/components/ui";
-import { anioLabel, getMateria, materias, pluralCatedras } from "@/lib/data";
+import { type Materia, anioLabel, getMateria, materias, pluralCatedras } from "@/lib/data";
+import { getUsuario } from "@/lib/usuario";
 import { CatedraTabs } from "./catedra-tabs";
 
 export function generateStaticParams() {
@@ -59,9 +60,14 @@ export default async function MateriaPage(props: PageProps<"/materias/[slug]">) 
         </div>
 
         <Suspense>
-          <CatedraTabs materia={materia} />
+          <CatedraTabsConUsuario materia={materia} />
         </Suspense>
       </PageMain>
     </>
   );
+}
+
+async function CatedraTabsConUsuario({ materia }: { materia: Materia }) {
+  const usuario = await getUsuario();
+  return <CatedraTabs materia={materia} usuarioEmail={usuario?.email ?? null} />;
 }

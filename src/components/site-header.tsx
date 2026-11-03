@@ -1,14 +1,15 @@
 import Form from "next/form";
 import Link from "next/link";
+import { Suspense } from "react";
+import { signOut } from "@/auth";
 import { SearchIcon, ShieldCheckIcon } from "@/components/icons";
+import { getUsuario } from "@/lib/usuario";
 
 type SiteHeaderProps = {
   /** Muestra el buscador compacto junto al logo. */
   search?: boolean;
   /** Muestra el botón "Escribir reseña". */
   cta?: boolean;
-  /** Muestra el indicador de cuenta verificada. */
-  badge?: boolean;
   active?: "explorar" | "mis-resenas";
   /** Reemplaza la navegación por un link "Cancelar". */
   cancelHref?: string;
@@ -25,7 +26,7 @@ export function Logo() {
   );
 }
 
-export function SiteHeader({ search, cta, badge, active, cancelHref }: SiteHeaderProps) {
+export function SiteHeader({ search, cta, active, cancelHref }: SiteHeaderProps) {
   return (
     <header className="border-b border-line">
       <div
@@ -81,17 +82,48 @@ export function SiteHeader({ search, cta, badge, active, cancelHref }: SiteHeade
                 Escribir reseña
               </Link>
             )}
-            {badge && (
-              <span className="ml-2 inline-flex items-center gap-2 rounded-full border border-line bg-paper py-1.5 pr-3 pl-1.5 text-sm font-medium">
-                <span className="inline-flex size-[30px] items-center justify-center rounded-full bg-brand-tint text-brand">
-                  <ShieldCheckIcon />
-                </span>
-                Verificado
-              </span>
-            )}
+            <Suspense>
+              <MenuUsuario />
+            </Suspense>
           </nav>
         )}
       </div>
     </header>
+  );
+}
+
+async function MenuUsuario() {
+  const usuario = await getUsuario();
+
+  if (!usuario) {
+    return (
+      <Link href="/entrar" className={`ml-2 ${navLink}`}>
+        Entrar
+      </Link>
+    );
+  }
+
+  async function salir() {
+    "use server";
+    await signOut({ redirectTo: "/" });
+  }
+
+  return (
+    <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-line bg-paper py-1.5 pr-1.5 pl-1.5 text-sm font-medium">
+      <span className="inline-flex size-[30px] items-center justify-center rounded-full bg-brand-tint text-brand">
+        <ShieldCheckIcon />
+      </span>
+      <span className="px-1.5" title={usuario.email}>
+        {usuario.nombre.split(" ")[0]}
+      </span>
+      <form action={salir}>
+        <button
+          type="submit"
+          className="cursor-pointer rounded-full px-3 py-1.5 text-sm font-semibold text-muted hover:bg-cream hover:text-ink"
+        >
+          Salir
+        </button>
+      </form>
+    </span>
   );
 }

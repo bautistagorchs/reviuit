@@ -32,7 +32,7 @@ export default function Home() {
 
   return (
     <>
-      <SiteHeader cta badge />
+      <SiteHeader cta />
       <PageMain>
         <section className="flex flex-wrap items-center gap-12 pt-[72px] pb-20">
           <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-5">
