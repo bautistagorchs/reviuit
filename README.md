@@ -27,7 +27,16 @@ El login usa [Auth.js](https://authjs.dev) con Google. Solo pueden entrar cuenta
    - URIs de redireccionamiento: `http://localhost:3000/api/auth/callback/google`
      (y `https://<tu-dominio>/api/auth/callback/google`).
 4. Copiá el Client ID y el Client Secret en `.env.local` como `AUTH_GOOGLE_ID` y `AUTH_GOOGLE_SECRET`.
-5. Generá `AUTH_SECRET` con `npx auth secret` (o cualquier string aleatorio largo).
+5. Generá `AUTH_SECRET` (un string aleatorio largo) y pegalo en `.env.local`:
+
+   ```bash
+   node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+   ```
+
+   Ojo: no uses `npx auth secret`, porque el paquete `auth` de npm ahora es de otra librería (Better Auth)
+   y escribe la variable con otro nombre.
+
+Después de cambiar `.env.local` hay que reiniciar `npm run dev`: las variables se leen solo al arrancar.
 
 En producción cargá las mismas variables en el hosting. Si no es Vercel, agregá también `AUTH_TRUST_HOST=true`.
 
