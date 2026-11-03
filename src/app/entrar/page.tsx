@@ -11,7 +11,10 @@ export const metadata: Metadata = { title: "Entrar · Reviuit" };
 
 const errores: Record<string, string> = {
   AccessDenied: `Solo pueden entrar cuentas @${dominioPermitido}. Probá de nuevo con tu mail de la facultad.`,
-  Configuration: "El login con Google todavía no está configurado en este servidor.",
+  Configuration:
+    process.env.NODE_ENV === "development"
+      ? "Falta configurar el login: revisá AUTH_SECRET, AUTH_GOOGLE_ID y AUTH_GOOGLE_SECRET en .env.local y reiniciá npm run dev. El detalle del error está en la terminal."
+      : "El login con Google todavía no está configurado en este servidor.",
 };
 
 // Solo rutas internas, para no redirigir a otro sitio después del login.
