@@ -4,6 +4,9 @@ export type Anio = 1 | 2 | 3;
 
 export type Resena = {
   autor: string;
+  anonimo: boolean;
+  /** Año de carrera de quien escribió; se muestra cuando la reseña es anónima. */
+  anio?: number;
   meta: string;
   rating: number;
   util: number;
@@ -68,10 +71,15 @@ export const materias: Materia[] = [
     resenas: 61,
     tags: ["TPs semanales", "Parcial práctico"],
     catedras: [
-      { slug: "duarte", profe: "Prof. Duarte", rating: "4,7", n: 24,
+      {
+        slug: "duarte",
+        profe: "Prof. Duarte",
+        rating: "4,7",
+        n: 24,
         resenas: [
           {
             autor: "Camila Herrera",
+            anonimo: false,
             meta: "1º año · cursó 1C 2026",
             cuatri: "1C 2026",
             rating: 5,
@@ -82,6 +90,7 @@ export const materias: Materia[] = [
           },
           {
             autor: "Nicolás Benítez",
+            anonimo: false,
             meta: "2º año · cursó 2C 2025",
             cuatri: "2C 2025",
             rating: 4,
@@ -92,10 +101,15 @@ export const materias: Materia[] = [
           },
         ],
       },
-      { slug: "sosa", profe: "Prof. Sosa", rating: "4,2", n: 19,
+      {
+        slug: "sosa",
+        profe: "Prof. Sosa",
+        rating: "4,2",
+        n: 19,
         resenas: [
           {
             autor: "Agustina Romero",
+            anonimo: false,
             meta: "1º año · cursó 1C 2026",
             cuatri: "1C 2026",
             rating: 4,
@@ -117,10 +131,15 @@ export const materias: Materia[] = [
     resenas: 52,
     tags: ["Final escrito", "Mucha lectura"],
     catedras: [
-      { slug: "ibanez", profe: "Prof. Ibáñez", rating: "3,9", n: 30,
+      {
+        slug: "ibanez",
+        profe: "Prof. Ibáñez",
+        rating: "3,9",
+        n: 30,
         resenas: [
           {
             autor: "Federico Castro",
+            anonimo: false,
             meta: "1º año · cursó 1C 2026",
             cuatri: "1C 2026",
             rating: 4,
@@ -131,6 +150,7 @@ export const materias: Materia[] = [
           },
           {
             autor: "Martina López",
+            anonimo: false,
             meta: "2º año · cursó 2C 2025",
             cuatri: "2C 2025",
             rating: 3,
@@ -141,10 +161,15 @@ export const materias: Materia[] = [
           },
         ],
       },
-      { slug: "correa", profe: "Prof. Correa", rating: "3,2", n: 22,
+      {
+        slug: "correa",
+        profe: "Prof. Correa",
+        rating: "3,2",
+        n: 22,
         resenas: [
           {
             autor: "Julián Acosta",
+            anonimo: false,
             meta: "1º año · cursó 1C 2026",
             cuatri: "1C 2026",
             rating: 3,
@@ -178,10 +203,15 @@ export const materias: Materia[] = [
     resenas: 54,
     tags: ["Asistencia obligatoria", "Dos parciales"],
     catedras: [
-      { slug: "benitez", profe: "Prof. Benítez", rating: "3,7", n: 28,
+      {
+        slug: "benitez",
+        profe: "Prof. Benítez",
+        rating: "3,7",
+        n: 28,
         resenas: [
           {
             autor: "Florencia Giménez",
+            anonimo: false,
             meta: "1º año · cursó 1C 2026",
             cuatri: "1C 2026",
             rating: 4,
@@ -202,10 +232,16 @@ export const materias: Materia[] = [
     rating: "4,2",
     resenas: 33,
     tags: ["Ensayos", "Debate en clase"],
-    catedras: [{ slug: "aguirre", profe: "Prof. Aguirre", rating: "4,2", n: 33,
+    catedras: [
+      {
+        slug: "aguirre",
+        profe: "Prof. Aguirre",
+        rating: "4,2",
+        n: 33,
         resenas: [
           {
             autor: "Bruno Sánchez",
+            anonimo: false,
             meta: "1º año · cursó 2C 2025",
             cuatri: "2C 2025",
             rating: 5,
@@ -216,6 +252,7 @@ export const materias: Materia[] = [
           },
           {
             autor: "Catalina Díaz",
+            anonimo: false,
             meta: "1º año · cursó 1C 2026",
             cuatri: "1C 2026",
             rating: 4,
@@ -225,7 +262,8 @@ export const materias: Materia[] = [
             tags: ["Ensayos"],
           },
         ],
-      }],
+      },
+    ],
   },
   {
     slug: "historia-economica",
@@ -264,7 +302,12 @@ export const materias: Materia[] = [
           ],
         },
         evaluacion: {
-          tags: ["2 parciales escritos", "TP grupal con R", "Toma asistencia", "Final promocionable"],
+          tags: [
+            "2 parciales escritos",
+            "TP grupal con R",
+            "Toma asistencia",
+            "Final promocionable",
+          ],
           votos: 17,
         },
         comparacion: {
@@ -277,7 +320,8 @@ export const materias: Materia[] = [
         destacada: {
           autor: "Sofía Martínez",
           rating: 5,
-          bueno: "Usa datos reales en cada clase y los TPs te preparan para el parcial.",
+          bueno:
+            "Usa datos reales en cada clase y los TPs te preparan para el parcial.",
           ojo: "Toma asistencia siempre y cuenta para la nota.",
           meta: "cursó 1C 2026",
           util: 24,
@@ -285,6 +329,7 @@ export const materias: Materia[] = [
         resenas: [
           {
             autor: "Sofía Martínez",
+            anonimo: false,
             meta: "2º año · cursó 1C 2026",
             cuatri: "1C 2026",
             rating: 5,
@@ -295,6 +340,7 @@ export const materias: Materia[] = [
           },
           {
             autor: "Tomás Gutiérrez",
+            anonimo: false,
             meta: "3º año · cursó 2C 2025",
             cuatri: "2C 2025",
             rating: 4,
@@ -305,6 +351,7 @@ export const materias: Materia[] = [
           },
           {
             autor: "Valentina Ruiz",
+            anonimo: false,
             meta: "2º año · cursó 1C 2026",
             cuatri: "1C 2026",
             rating: 4,
@@ -315,11 +362,13 @@ export const materias: Materia[] = [
           },
           {
             autor: "Joaquín Pereyra",
+            anonimo: false,
             meta: "2º año · cursó 2C 2025",
             cuatri: "2C 2025",
             rating: 3,
             util: 4,
-            texto: "Sabe mucho pero va rápido. Si te perdés una clase cuesta engancharte de nuevo.",
+            texto:
+              "Sabe mucho pero va rápido. Si te perdés una clase cuesta engancharte de nuevo.",
             tags: ["Ritmo rápido"],
           },
         ],
@@ -340,7 +389,8 @@ export const materias: Materia[] = [
         destacada: {
           autor: "Lucía Fernández",
           rating: 4,
-          bueno: "Muy flexible con las entregas y responde todas las dudas por mail.",
+          bueno:
+            "Muy flexible con las entregas y responde todas las dudas por mail.",
           ojo: "El final oral pesa mucho; preparalo con tiempo.",
           meta: "cursó 2C 2025",
           util: 11,
@@ -362,7 +412,8 @@ export const materias: Materia[] = [
         destacada: {
           autor: "Mateo Álvarez",
           rating: 4,
-          bueno: "Clases cortas y al grano, con ejercicios resueltos en el campus.",
+          bueno:
+            "Clases cortas y al grano, con ejercicios resueltos en el campus.",
           ojo: "Es su primer año dictando, todavía ajusta el programa.",
           meta: "cursó 1C 2026",
           util: 3,
@@ -398,15 +449,22 @@ export function anioLabel(anio: number) {
   return `${anio}º año`;
 }
 
+/** Lo que se ve como autor: el nombre, o el año de cursada si la reseña es anónima. */
+export function autorVisible(r: {
+  autor: string;
+  anonimo: boolean;
+  anio?: number;
+}) {
+  if (!r.anonimo) return r.autor;
+  return r.anio ? `Estudiante de ${anioLabel(r.anio)}` : "Estudiante";
+}
+
 export function pluralCatedras(n: number) {
   return n === 1 ? "1 cátedra" : `${n} cátedras`;
 }
 
 export function normalizar(s: string) {
-  return s
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "");
+  return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 }
 
 export const aniosCarrera = [1, 2, 3, 4, 5];

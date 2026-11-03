@@ -4,30 +4,55 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { type FormEvent, type ReactNode, useState } from "react";
 import { InfoIcon, StarIcon } from "@/components/icons";
 import { Eyebrow, VerifiedAvatar } from "@/components/ui";
-import { aniosCarrera, anioLabel, cuatrimestres, materias, opcionesEvaluacion } from "@/lib/data";
+import {
+  aniosCarrera,
+  anioLabel,
+  autorVisible,
+  cuatrimestres,
+  materias,
+  opcionesEvaluacion,
+} from "@/lib/data";
 import { guardarResena } from "@/lib/resenas-locales";
 
 const etiquetas = ["", "Mala", "Floja", "Bien", "Muy buena", "Excelente"];
 
-const selectClass = "rounded-xl border border-line-strong bg-white p-3 text-base font-normal text-ink";
+const selectClass =
+  "rounded-xl border border-line-strong bg-white p-3 text-base font-normal text-ink";
 
-function Paso({ titulo, className = "", children }: { titulo: string; className?: string; children: ReactNode }) {
+function Paso({
+  titulo,
+  className = "",
+  children,
+}: {
+  titulo: string;
+  className?: string;
+  children: ReactNode;
+}) {
   return (
     <fieldset className="m-0 rounded-[20px] border-0 bg-paper p-6">
-      <legend className="float-left mb-4 w-full text-[13px] font-bold tracking-[0.18em] text-brand">{titulo}</legend>
+      <legend className="float-left mb-4 w-full text-[13px] font-bold tracking-[0.18em] text-brand">
+        {titulo}
+      </legend>
       <div className={`clear-both ${className}`}>{children}</div>
     </fieldset>
   );
 }
 
-export function ResenaForm({ usuario }: { usuario: { nombre: string; email: string } }) {
+export function ResenaForm({
+  usuario,
+}: {
+  usuario: { nombre: string; email: string };
+}) {
   const router = useRouter();
   const params = useSearchParams();
-  const materiaInicial = materias.find((m) => m.slug === params.get("materia")) ?? materias[0];
+  const materiaInicial =
+    materias.find((m) => m.slug === params.get("materia")) ?? materias[0];
 
   const [materiaSlug, setMateriaSlug] = useState(materiaInicial.slug);
+  const [anonimo, setAnonimo] = useState(false);
   const [catedraSlug, setCatedraSlug] = useState(
-    materiaInicial.catedras.find((c) => c.slug === params.get("catedra"))?.slug ?? materiaInicial.catedras[0].slug,
+    materiaInicial.catedras.find((c) => c.slug === params.get("catedra"))
+      ?.slug ?? materiaInicial.catedras[0].slug,
   );
   const [cuatri, setCuatri] = useState(cuatrimestres[0]);
   const [rating, setRating] = useState(0);
@@ -38,7 +63,8 @@ export function ResenaForm({ usuario }: { usuario: { nombre: string; email: stri
   const [error, setError] = useState<string | null>(null);
 
   const materia = materias.find((m) => m.slug === materiaSlug) ?? materias[0];
-  const catedra = materia.catedras.find((c) => c.slug === catedraSlug) ?? materia.catedras[0];
+  const catedra =
+    materia.catedras.find((c) => c.slug === catedraSlug) ?? materia.catedras[0];
 
   // Lo que se muestra junto al nombre en la página de la materia.
   const contexto: string[] = [];
@@ -63,7 +89,8 @@ export function ResenaForm({ usuario }: { usuario: { nombre: string; email: stri
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!rating) return setError("Elegí un puntaje de 1 a 5.");
-    if (texto.trim().length < 20) return setError("Contanos un poco más: al menos 20 caracteres.");
+    if (texto.trim().length < 20)
+      return setError("Contanos un poco más: al menos 20 caracteres.");
     setError(null);
     const resena = guardarResena({
       materiaSlug: materia.slug,
@@ -73,19 +100,34 @@ export function ResenaForm({ usuario }: { usuario: { nombre: string; email: stri
       meta: contexto.join(" · "),
       cuatri,
       rating,
+      anonimo,
+      anio: anio ?? undefined,
       texto: texto.trim(),
       tags: opcionesEvaluacion.filter((op) => evaluacion.has(op)),
     });
-    router.push(`/materias/${materia.slug}?catedra=${catedra.slug}&nueva=${resena.id}`);
+    router.push(
+      `/materias/${materia.slug}?catedra=${catedra.slug}&nueva=${resena.id}`,
+    );
   };
 
   return (
     <div className="flex flex-wrap items-start gap-8">
-      <form onSubmit={onSubmit} noValidate className="flex min-w-0 flex-[999_1_560px] flex-col gap-5">
-        <Paso titulo="1 · QUÉ CURSASTE" className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4">
+      <form
+        onSubmit={onSubmit}
+        noValidate
+        className="flex min-w-0 flex-[999_1_560px] flex-col gap-5"
+      >
+        <Paso
+          titulo="1 · QUÉ CURSASTE"
+          className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-4"
+        >
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
             Materia
-            <select value={materiaSlug} onChange={(e) => cambiarMateria(e.target.value)} className={selectClass}>
+            <select
+              value={materiaSlug}
+              onChange={(e) => cambiarMateria(e.target.value)}
+              className={selectClass}
+            >
               {materias.map((m) => (
                 <option key={m.slug} value={m.slug}>
                   {m.nombre}
@@ -95,7 +137,11 @@ export function ResenaForm({ usuario }: { usuario: { nombre: string; email: stri
           </label>
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
             Profe
-            <select value={catedra.slug} onChange={(e) => setCatedraSlug(e.target.value)} className={selectClass}>
+            <select
+              value={catedra.slug}
+              onChange={(e) => setCatedraSlug(e.target.value)}
+              className={selectClass}
+            >
               {materia.catedras.map((c) => (
                 <option key={c.slug} value={c.slug}>
                   {c.profe}
@@ -105,7 +151,11 @@ export function ResenaForm({ usuario }: { usuario: { nombre: string; email: stri
           </label>
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
             Cuatrimestre
-            <select value={cuatri} onChange={(e) => setCuatri(e.target.value)} className={selectClass}>
+            <select
+              value={cuatri}
+              onChange={(e) => setCuatri(e.target.value)}
+              className={selectClass}
+            >
               {cuatrimestres.map((c) => (
                 <option key={c}>{c}</option>
               ))}
@@ -114,7 +164,11 @@ export function ResenaForm({ usuario }: { usuario: { nombre: string; email: stri
         </Paso>
 
         <Paso titulo="2 · TU PUNTAJE" className="flex flex-col gap-4">
-          <div className="flex items-center gap-1.5" role="radiogroup" aria-label="Puntaje">
+          <div
+            className="flex items-center gap-1.5"
+            role="radiogroup"
+            aria-label="Puntaje"
+          >
             {[1, 2, 3, 4, 5].map((n) => (
               <button
                 key={n}
@@ -128,7 +182,9 @@ export function ResenaForm({ usuario }: { usuario: { nombre: string; email: stri
                 <StarIcon size={36} filled={n <= rating} />
               </button>
             ))}
-            <span className="ml-2 text-lg font-bold text-brand">{etiquetas[rating]}</span>
+            <span className="ml-2 text-lg font-bold text-brand">
+              {etiquetas[rating]}
+            </span>
           </div>
           <p className="m-0 text-sm font-semibold">¿Cómo evalúa?</p>
           <div className="flex flex-wrap gap-2">
@@ -168,19 +224,39 @@ export function ResenaForm({ usuario }: { usuario: { nombre: string; email: stri
           />
           <p className="m-0 flex items-start gap-2 text-sm leading-[1.45] text-body">
             <InfoIcon className="mt-px flex-none text-brand" />
-            Para cuidarte: no pongas tu nota exacta, tu grupo de TP ni anécdotas que solo vos viviste.
+            Para cuidarte: no pongas tu nota exacta, tu grupo de TP ni anécdotas
+            que solo vos viviste.
           </p>
         </Paso>
 
-        <Paso titulo="4 · QUÉ MOSTRAMOS DE VOS" className="flex flex-col gap-3.5">
+        <Paso
+          titulo="4 · QUÉ MOSTRAMOS DE VOS"
+          className="flex flex-col gap-3.5"
+        >
+          <label className="flex cursor-pointer items-center justify-between gap-4 text-base font-semibold">
+            Tu nombre
+            <input
+              type="checkbox"
+              role="switch"
+              checked={!anonimo}
+              onChange={() => setAnonimo((v) => !v)}
+              className="size-[22px] accent-brand"
+            />
+          </label>
+          <p className="m-0 text-sm text-muted">
+            Recomendamos que tu nombre se vea: ayuda a que la reseña sea más
+            confiable y útil para otros estudiantes.
+          </p>
           <label className="flex items-center justify-between gap-4 text-base font-semibold">
             Tu año de carrera
             <select
               value={anio ?? ""}
-              onChange={(e) => setAnio(e.target.value ? Number(e.target.value) : null)}
+              onChange={(e) =>
+                setAnio(e.target.value ? Number(e.target.value) : null)
+              }
               className={selectClass}
             >
-              <option value="">No mostrarlo</option>
+              <option value="">Seleccionar año de cursada</option>
               {aniosCarrera.map((a) => (
                 <option key={a} value={a}>
                   {anioLabel(a)}
@@ -188,19 +264,6 @@ export function ResenaForm({ usuario }: { usuario: { nombre: string; email: stri
               ))}
             </select>
           </label>
-          <label className="flex cursor-pointer items-center justify-between gap-4 text-base font-semibold">
-            El cuatrimestre que cursaste
-            <input
-              type="checkbox"
-              role="switch"
-              checked={showCuatri}
-              onChange={() => setShowCuatri((v) => !v)}
-              className="size-[22px] accent-brand"
-            />
-          </label>
-          <p className="m-0 text-sm text-muted">
-            Tu nombre siempre aparece en la reseña. El resto del contexto lo elegís vos.
-          </p>
         </Paso>
 
         {error && (
@@ -215,22 +278,33 @@ export function ResenaForm({ usuario }: { usuario: { nombre: string; email: stri
           >
             Publicar reseña
           </button>
-          <span className="text-sm text-muted">Podés borrarla cuando quieras desde Mis reseñas.</span>
+          <span className="text-sm text-muted">
+            Podés borrarla cuando quieras desde Mis reseñas.
+          </span>
         </div>
       </form>
 
-      <aside aria-label="Vista previa" className="flex flex-[1_1_340px] flex-col gap-4">
+      <aside
+        aria-label="Vista previa"
+        className="flex flex-[1_1_340px] flex-col gap-4"
+      >
         <Eyebrow>ASÍ LA VA A VER EL RESTO</Eyebrow>
         <article className="flex flex-col gap-3 rounded-[20px] border-2 border-brand bg-paper p-[22px] shadow-offset">
           <div className="flex items-center justify-between gap-3">
             <p className="m-0 flex items-center gap-2 text-sm font-semibold">
               <VerifiedAvatar size={30} />
-              {usuario.nombre}
+              {autorVisible({
+                autor: usuario.nombre,
+                anonimo,
+                anio: anio ?? undefined,
+              })}
             </p>
             <span className="font-extrabold text-brand">★ {rating || "–"}</span>
           </div>
           <p className="m-0 text-[13px] text-muted">{meta.join(" · ")}</p>
-          <p className={`m-0 text-base leading-[1.55] whitespace-pre-line ${texto ? "" : "text-faint"}`}>
+          <p
+            className={`m-0 text-base leading-[1.55] whitespace-pre-line ${texto ? "" : "text-faint"}`}
+          >
             {texto || "Acá va a aparecer lo que escribas."}
           </p>
           {evaluacion.size > 0 && (
@@ -238,7 +312,10 @@ export function ResenaForm({ usuario }: { usuario: { nombre: string; email: stri
               {opcionesEvaluacion
                 .filter((op) => evaluacion.has(op))
                 .map((op) => (
-                  <span key={op} className="rounded-full bg-cream px-2.5 py-[5px] text-[13px] font-semibold text-body">
+                  <span
+                    key={op}
+                    className="rounded-full bg-cream px-2.5 py-[5px] text-[13px] font-semibold text-body"
+                  >
                     {op}
                   </span>
                 ))}
