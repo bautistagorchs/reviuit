@@ -7,6 +7,8 @@ import type { Resena } from "@/lib/data";
 
 export type ResenaLocal = Resena & {
   id: string;
+  /** Mail de quien la escribió, para saber cuáles son "tuyas". */
+  autorEmail: string;
   materiaSlug: string;
   catedraSlug: string;
   creadaEn: string;

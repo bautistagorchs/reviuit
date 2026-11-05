@@ -4,7 +4,13 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Chip, Eyebrow, RatingPill } from "@/components/ui";
-import { type Anio, anioLabel, carreras, materias, normalizar } from "@/lib/data";
+import {
+  type Anio,
+  anioLabel,
+  carreras,
+  materias,
+  normalizar,
+} from "@/lib/data";
 
 const anios: Anio[] = [1, 2, 3];
 type Orden = "resenas" | "rating" | "az";
@@ -12,7 +18,8 @@ type Vista = "materias" | "profes";
 
 const ratingNum = (r: string | null) => (r ? Number(r.replace(",", ".")) : 0);
 
-const selectClass = "rounded-xl border border-line-strong bg-paper px-3.5 py-3 text-[15px] text-ink";
+const selectClass =
+  "rounded-xl border border-line-strong bg-paper px-3.5 py-3 text-[15px] text-ink";
 
 export function Explorador() {
   const busqueda = useSearchParams().get("q")?.trim() ?? "";
@@ -23,7 +30,9 @@ export function Explorador() {
 
   // Con búsqueda activa se busca en todos los años; sin búsqueda, en el año elegido.
   const coincide = (m: (typeof materias)[number]) =>
-    !q || normalizar(m.nombre).includes(q) || m.catedras.some((c) => normalizar(c.profe).includes(q));
+    !q ||
+    normalizar(m.nombre).includes(q) ||
+    m.catedras.some((c) => normalizar(c.profe).includes(q));
 
   const lista = materias
     .filter((m) => (q ? coincide(m) : m.anio === anio))
@@ -35,7 +44,12 @@ export function Explorador() {
 
   const profes = lista
     .flatMap((m) => m.catedras.map((c) => ({ ...c, materia: m })))
-    .filter((c) => !q || normalizar(c.profe).includes(q) || normalizar(c.materia.nombre).includes(q))
+    .filter(
+      (c) =>
+        !q ||
+        normalizar(c.profe).includes(q) ||
+        normalizar(c.materia.nombre).includes(q),
+    )
     .sort((a, b) => {
       if (orden === "az") return a.profe.localeCompare(b.profe, "es");
       if (orden === "rating") return ratingNum(b.rating) - ratingNum(a.rating);
@@ -55,7 +69,11 @@ export function Explorador() {
               : "Elegí tu año y mirá qué dicen de cada cátedra antes de inscribirte."}
           </p>
         </div>
-        <div role="tablist" aria-label="Ver por" className="inline-flex rounded-full bg-sand p-1">
+        <div
+          role="tablist"
+          aria-label="Ver por"
+          className="inline-flex rounded-full bg-sand p-1"
+        >
           {(["materias", "profes"] as const).map((v) => (
             <button
               key={v}
@@ -63,7 +81,9 @@ export function Explorador() {
               aria-selected={vista === v}
               onClick={() => setVista(v)}
               className={`cursor-pointer rounded-full px-5 py-2.5 ${
-                vista === v ? "bg-paper font-bold text-brand" : "bg-transparent font-semibold text-body"
+                vista === v
+                  ? "bg-paper font-bold text-brand"
+                  : "bg-transparent font-semibold text-body"
               }`}
             >
               {v === "materias" ? "Materias" : "Profes"}
@@ -73,9 +93,17 @@ export function Explorador() {
       </div>
 
       <div className="flex flex-wrap items-start gap-8">
-        <aside aria-label="Filtros" className="flex flex-[1_1_240px] flex-col gap-7">
-          <fieldset className="m-0 flex flex-col gap-2.5 border-0 p-0" disabled={!!q}>
-            <legend className="mb-2.5 text-[13px] font-bold tracking-[0.18em] text-brand">AÑO</legend>
+        <aside
+          aria-label="Filtros"
+          className="flex flex-[1_1_240px] flex-col gap-7"
+        >
+          <fieldset
+            className="m-0 flex flex-col gap-2.5 border-0 p-0"
+            disabled={!!q}
+          >
+            <legend className="mb-2.5 text-[13px] font-bold tracking-[0.18em] text-brand">
+              AÑO
+            </legend>
             {anios.map((a) => {
               const activo = !q && a === anio;
               const total = materias.filter((m) => m.anio === a).length;
@@ -99,7 +127,7 @@ export function Explorador() {
               );
             })}
           </fieldset>
-          <div className="flex flex-col gap-2">
+          {/* <div className="flex flex-col gap-2">
             <label htmlFor="carrera" className="text-[13px] font-bold tracking-[0.18em] text-brand">
               CARRERA
             </label>
@@ -109,9 +137,12 @@ export function Explorador() {
                 <option key={c}>{c}</option>
               ))}
             </select>
-          </div>
+          </div> */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="orden" className="text-[13px] font-bold tracking-[0.18em] text-brand">
+            <label
+              htmlFor="orden"
+              className="text-[13px] font-bold tracking-[0.18em] text-brand"
+            >
               ORDENAR POR
             </label>
             <select
@@ -130,7 +161,10 @@ export function Explorador() {
             <p className="m-0 text-sm leading-[1.45] text-ink">
               Tu reseña le ahorra un mal cuatri a alguien.
             </p>
-            <Link href="/resena/nueva" className="self-start text-[15px] font-bold">
+            <Link
+              href="/resena/nueva"
+              className="self-start text-[15px] font-bold"
+            >
               Escribir una →
             </Link>
           </div>
@@ -142,9 +176,15 @@ export function Explorador() {
         >
           {vista === "materias" &&
             lista.map((m) => (
-              <article key={m.slug} className="flex flex-col gap-4 rounded-[18px] border border-line bg-paper p-[22px]">
+              <article
+                key={m.slug}
+                className="flex flex-col gap-4 rounded-[18px] border border-line bg-paper p-[22px]"
+              >
                 <div className="flex items-start justify-between gap-3">
-                  <Link href={`/materias/${m.slug}`} className="text-xl leading-[1.2] font-bold no-underline">
+                  <Link
+                    href={`/materias/${m.slug}`}
+                    className="text-xl leading-[1.2] font-bold no-underline"
+                  >
                     {m.nombre}
                   </Link>
                   <RatingPill value={m.rating} />
@@ -197,7 +237,8 @@ export function Explorador() {
             <div className="flex flex-col gap-2 rounded-[18px] border border-dashed border-line-strong p-8">
               <Eyebrow>SIN RESULTADOS</Eyebrow>
               <p className="m-0 text-[17px] text-body">
-                Todavía no hay reseñas acá. Si cursaste alguna materia, ¡podés ser el primero!
+                Todavía no hay reseñas acá. Si cursaste alguna materia, ¡podés
+                ser el primero!
               </p>
               <Link href="/resena/nueva" className="self-start font-bold">
                 Escribir una reseña →
