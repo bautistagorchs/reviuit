@@ -306,7 +306,7 @@ export function CatedraTabs({
                         : "border-line-strong bg-transparent text-ink"
                     }`}
                   >
-                    <ThumbUpIcon />
+                    <ThumbUpIcon fill={votada ? "currentColor" : "none"} />
                     Me sirvió · {r.util + (votada ? 1 : 0)}
                   </button>
                   {r.propia && (
