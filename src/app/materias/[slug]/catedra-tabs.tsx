@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ShieldCheckIcon, StarIcon, ThumbUpIcon } from "@/components/icons";
-import { Chip, Eyebrow, VerifiedAvatar } from "@/components/ui";
+import { Chip, Estrellas, Eyebrow, VerifiedAvatar } from "@/components/ui";
 import type { Catedra, Materia, Resena } from "@/lib/data";
 import { borrarResena, useResenasLocales } from "@/lib/resenas-locales";
 
@@ -95,9 +95,13 @@ export function CatedraTabs({ materia }: { materia: Materia }) {
         <aside className="flex flex-[1_1_340px] flex-col gap-4">
           <section aria-label="Resumen" className="flex flex-col gap-5 rounded-[20px] bg-paper p-6">
             <div className="flex items-center gap-4">
-              <p className={`m-0 text-[64px] leading-none font-extrabold ${catedra.rating ? "text-brand" : "text-faint"}`}>
-                {catedra.rating ?? "—"}
-              </p>
+              <div className="flex flex-col gap-2">
+                <p className={`m-0 text-[64px] leading-none font-extrabold ${catedra.rating ? "text-brand" : "text-faint"}`}>
+                  {catedra.rating ?? "—"}
+                  {catedra.rating && <span className="ml-1 text-2xl font-bold text-faint">/5</span>}
+                </p>
+                {catedra.rating && <Estrellas value={catedra.rating} />}
+              </div>
               <div>
                 <p className="m-0 mb-1 text-base font-bold">
                   {catedra.resumen?.label ?? (catedra.rating ? "Promedio general" : "Pocos datos todavía")}
