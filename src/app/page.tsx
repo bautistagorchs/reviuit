@@ -88,7 +88,9 @@ export default function Home() {
               </button>
             </Form>
             <div className="flex flex-wrap items-center gap-2">
-              <strong className="mr-1 text-base text-muted">Probá con:</strong>
+              <strong className="mr-1 text-base text-muted">
+                Probá escribiendo:
+              </strong>
               {sugerencias.map((m) => (
                 <Link
                   key={m.slug}
