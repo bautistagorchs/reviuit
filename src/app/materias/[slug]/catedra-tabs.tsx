@@ -64,7 +64,7 @@ export function CatedraTabs({
     materia.catedras.find((c) => c.slug === inicial)?.slug ??
       materia.catedras[0].slug,
   );
-  const [orden, setOrden] = useState<Orden>("utiles");
+  const [orden, setOrden] = useState<Orden | null>(null);
   const [votadas, setVotadas] = useState<Set<string>>(new Set());
 
   const catedra =
@@ -82,11 +82,12 @@ export function CatedraTabs({
     ...deEstaCatedra.filter((r) => !r.propia),
     ...resenasDe(catedra)
       .map((r, i) => ({ ...r, id: `${catedra.slug}-${i}`, propia: false }))
-      .sort((a, b) =>
-        orden === "recientes"
-          ? cuatriKey(b.cuatri) - cuatriKey(a.cuatri)
-          : b.util - a.util,
-      ),
+      .sort((a, b) => {
+        if (orden === "recientes")
+          return cuatriKey(b.cuatri) - cuatriKey(a.cuatri);
+        if (orden === "utiles") return b.util - a.util;
+        return 0;
+      }),
   ].filter((r) => orden !== "2026" || r.cuatri.endsWith("2026"));
   const recienPublicada = propias.some((r) => r.id === nueva);
 
@@ -232,7 +233,7 @@ export function CatedraTabs({
               <button
                 key={o.id}
                 aria-pressed={orden === o.id}
-                onClick={() => setOrden(o.id)}
+                onClick={() => setOrden(orden === o.id ? null : o.id)}
                 className={`cursor-pointer rounded-full px-4 py-2.5 text-sm ${
                   orden === o.id
                     ? "bg-ink font-bold text-cream"

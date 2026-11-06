@@ -14,7 +14,7 @@ import {
 
 const anios: Anio[] = [1, 2, 3];
 type Orden = "resenas" | "rating" | "az";
-type Vista = "materias" | "profes";
+type Vista = "materias" | "profesores";
 
 const ratingNum = (r: string | null) => (r ? Number(r.replace(",", ".")) : 0);
 
@@ -74,7 +74,7 @@ export function Explorador() {
           aria-label="Ver por"
           className="inline-flex rounded-full bg-sand p-1"
         >
-          {(["materias", "profes"] as const).map((v) => (
+          {(["materias", "profesores"] as const).map((v) => (
             <button
               key={v}
               role="tab"
@@ -86,7 +86,7 @@ export function Explorador() {
                   : "bg-transparent font-semibold text-body"
               }`}
             >
-              {v === "materias" ? "Materias" : "Profes"}
+              {v === "materias" ? "Materias" : "Profesores"}
             </button>
           ))}
         </div>
@@ -176,61 +176,68 @@ export function Explorador() {
         >
           {vista === "materias" &&
             lista.map((m) => (
-              <article
-                key={m.slug}
-                className="flex flex-col gap-4 rounded-[18px] border border-line bg-paper p-[22px]"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <Link
-                    href={`/materias/${m.slug}`}
-                    className="text-xl leading-[1.2] font-bold no-underline"
-                  >
-                    {m.nombre}
-                  </Link>
-                  <RatingPill value={m.rating} />
-                </div>
-                <ul className="m-0 flex list-none flex-col gap-0.5 p-0">
-                  {m.catedras.map((c) => (
-                    <li
-                      key={c.slug}
-                      className="flex items-center justify-between border-t border-line-soft py-2.5 text-[15px]"
+              <Link href={`/materias/${m.slug}`}>
+                <article
+                  key={m.slug}
+                  className="flex flex-col gap-4 rounded-[18px] border border-line bg-paper p-[22px]"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <Link
+                      href={`/materias/${m.slug}`}
+                      className="text-xl leading-[1.2] font-bold no-underline"
                     >
-                      <span className="font-semibold">{c.profe}</span>
-                      <span className="text-muted">
-                        {c.rating ?? "—"} · {c.n} reseñas
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="flex flex-wrap gap-1.5">
-                  {m.tags.map((t) => (
-                    <Chip key={t} tone="neutral">
-                      {t}
-                    </Chip>
-                  ))}
-                </div>
-              </article>
+                      {m.nombre}
+                    </Link>
+                    <RatingPill value={m.rating} />
+                  </div>
+                  <ul className="m-0 flex list-none flex-col gap-0.5 p-0">
+                    {m.catedras.map((c) => (
+                      <li
+                        key={c.slug}
+                        className="flex items-center justify-between border-t border-line-soft py-2.5 text-[15px]"
+                      >
+                        <span className="font-semibold">{c.profe}</span>
+                        <span className="text-muted">
+                          {c.rating ?? "—"} · {c.n} reseñas
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex flex-wrap gap-1.5">
+                    {m.tags.map((t) => (
+                      <Chip key={t} tone="neutral">
+                        {t}
+                      </Chip>
+                    ))}
+                  </div>
+                </article>
+              </Link>
             ))}
 
-          {vista === "profes" &&
+          {vista === "profesores" &&
             profes.map((c) => (
-              <article
-                key={`${c.materia.slug}-${c.slug}`}
-                className="flex flex-col gap-3 rounded-[18px] border border-line bg-paper p-[22px]"
+              <Link
+                href={`/materias/${c.materia.slug}?catedra=${c.slug}`}
+                // className="text-xl leading-[1.2] font-bold no-underline"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <Link
-                    href={`/materias/${c.materia.slug}?catedra=${c.slug}`}
-                    className="text-xl leading-[1.2] font-bold no-underline"
-                  >
-                    {c.profe}
-                  </Link>
-                  {c.rating && <RatingPill value={c.rating} />}
-                </div>
-                <p className="m-0 text-[15px] text-body">
-                  {c.materia.nombre} · {c.n} reseñas
-                </p>
-              </article>
+                <article
+                  key={`${c.materia.slug}-${c.slug}`}
+                  className="flex flex-col gap-3 rounded-[18px] border border-line bg-paper p-[22px]"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <Link
+                      href={`/materias/${c.materia.slug}?catedra=${c.slug}`}
+                      className="text-xl leading-[1.2] font-bold no-underline"
+                    >
+                      {c.profe}
+                    </Link>
+                    {c.rating && <RatingPill value={c.rating} />}
+                  </div>
+                  <p className="m-0 text-[15px] text-body">
+                    {c.materia.nombre} · {c.n} reseñas
+                  </p>
+                </article>
+              </Link>
             ))}
 
           {(vista === "materias" ? lista.length : profes.length) === 0 && (
