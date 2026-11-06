@@ -5,7 +5,13 @@ import { Suspense } from "react";
 import { PlusIcon } from "@/components/icons";
 import { SiteHeader } from "@/components/site-header";
 import { PageMain } from "@/components/ui";
-import { type Materia, anioLabel, getMateria, materias, pluralCatedras } from "@/lib/data";
+import {
+  type Materia,
+  anioLabel,
+  getMateria,
+  materias,
+  pluralCatedras,
+} from "@/lib/data";
 import { getUsuario } from "@/lib/usuario";
 import { CatedraTabs } from "./catedra-tabs";
 
@@ -13,13 +19,17 @@ export function generateStaticParams() {
   return materias.map((m) => ({ slug: m.slug }));
 }
 
-export async function generateMetadata(props: PageProps<"/materias/[slug]">): Promise<Metadata> {
+export async function generateMetadata(
+  props: PageProps<"/materias/[slug]">,
+): Promise<Metadata> {
   const materia = getMateria((await props.params).slug);
   return { title: materia ? `${materia.nombre} · Reviuit` : "Reviuit" };
 }
 
-export default async function MateriaPage(props: PageProps<"/materias/[slug]">) {
-  const { slug } = await props.params;
+export default async function MateriaPage(
+  props: PageProps<"/materias/[slug]">,
+) {
+  const { slug } = await props?.params;
   const materia = getMateria(slug);
   if (!materia) notFound();
 
@@ -28,16 +38,20 @@ export default async function MateriaPage(props: PageProps<"/materias/[slug]">) 
       <SiteHeader search />
       <PageMain className="pt-7">
         <nav aria-label="Ruta" className="mb-5 text-sm text-muted">
-          <Link href="/explorar">Explorar</Link> / <Link href="/explorar">{anioLabel(materia.anio)}</Link> /{" "}
+          <Link href="/explorar">Explorar</Link> /{" "}
+          <Link href="/explorar">{anioLabel(materia.anio)}</Link> /{" "}
           <span aria-current="page">{materia.nombre}</span>
         </nav>
 
         <div className="mb-7 flex flex-wrap items-end justify-between gap-5">
           <div>
-            <h1 className="m-0 mb-2 text-5xl font-extrabold tracking-[-0.01em] text-brand">{materia.nombre}</h1>
+            <h1 className="m-0 mb-2 text-5xl font-extrabold tracking-[-0.01em] text-brand">
+              {materia.nombre}
+            </h1>
             <p className="m-0 text-[17px] text-body">
-              {anioLabel(materia.anio)} · {pluralCatedras(materia.catedras.length)} · {materia.resenas} reseñas de
-              alumnos verificados
+              {anioLabel(materia.anio)} ·{" "}
+              {pluralCatedras(materia.catedras.length)} · {materia.resenas}{" "}
+              reseñas de alumnos verificados
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -69,5 +83,7 @@ export default async function MateriaPage(props: PageProps<"/materias/[slug]">) 
 
 async function CatedraTabsConUsuario({ materia }: { materia: Materia }) {
   const usuario = await getUsuario();
-  return <CatedraTabs materia={materia} usuarioEmail={usuario?.email ?? null} />;
+  return (
+    <CatedraTabs materia={materia} usuarioEmail={usuario?.email ?? null} />
+  );
 }

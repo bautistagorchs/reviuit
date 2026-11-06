@@ -474,5 +474,8 @@ export const opcionesEvaluacion = [
   "TP grupal",
   "Final oral",
   "Toma asistencia",
-  "Se promociona",
+  "Parcial oral",
+  "Final escrito",
+  "TP individual",
+  "TP grupal",
 ];
