@@ -124,7 +124,7 @@ export default function Home() {
                 <span className="text-xl leading-[1.2] font-bold text-brand">{m.nombre}</span>
                 <span className="flex items-center gap-1.5 text-[15px] text-body">
                   <StarIcon size={18} className="text-brand" />
-                  <strong className="text-ink">{m.rating}</strong> · {m.resenas} reseñas
+                  <strong className="text-ink">{m.rating}</strong>/5 · {m.resenas} reseñas
                 </span>
                 <span className="text-sm text-muted">{pluralCatedras(m.catedras.length)}</span>
               </Link>

@@ -90,6 +90,7 @@ export default async function CompararPage(props: PageProps<"/materias/[slug]/co
                     {c.rating && c.n >= MIN_RESENAS_PROMEDIO ? (
                       <>
                         <span className="text-[28px] font-extrabold text-brand">{c.rating}</span>
+                        <span className="text-base font-bold text-muted">/5</span>
                         {c === masElegida && (
                           <span className="ml-2 rounded-full bg-brand px-2 py-1 align-middle text-xs font-bold text-white">
                             LA MÁS ELEGIDA

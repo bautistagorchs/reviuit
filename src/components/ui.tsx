@@ -24,6 +24,7 @@ export function RatingPill({ value }: { value: string }) {
     <span className="inline-flex flex-none items-center gap-1 rounded-full bg-brand-tint px-2.5 py-1 text-[15px] font-bold text-brand">
       <StarIcon size={15} />
       {value}
+      <span className="font-semibold opacity-70">/5</span>
     </span>
   );
 }

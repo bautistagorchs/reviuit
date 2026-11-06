@@ -157,7 +157,7 @@ export function Explorador() {
                     >
                       <span className="font-semibold">{c.profe}</span>
                       <span className="text-muted">
-                        {c.rating ?? "—"} · {c.n} reseñas
+                        {c.rating ? `${c.rating}/5` : "—"} · {c.n} reseñas
                       </span>
                     </li>
                   ))}

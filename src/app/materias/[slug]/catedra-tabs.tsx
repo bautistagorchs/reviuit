@@ -101,6 +101,7 @@ export function CatedraTabs({ materia, usuarioEmail }: { materia: Materia; usuar
             <div className="flex items-center gap-4">
               <p className={`m-0 text-[64px] leading-none font-extrabold ${catedra.rating ? "text-brand" : "text-faint"}`}>
                 {catedra.rating ?? "—"}
+                {catedra.rating && <span className="text-2xl font-bold text-muted">/5</span>}
               </p>
               <div>
                 <p className="m-0 mb-1 text-base font-bold">
