@@ -1,8 +1,8 @@
 import Form from "next/form";
 import Link from "next/link";
 import { Suspense } from "react";
-import { signOut } from "@/auth";
 import { SearchIcon, ShieldCheckIcon } from "@/components/icons";
+import { salir } from "@/lib/acciones-auth";
 import { getUsuario } from "@/lib/usuario";
 
 type SiteHeaderProps = {
@@ -15,18 +15,28 @@ type SiteHeaderProps = {
   cancelHref?: string;
 };
 
-const navLink = "rounded-full px-3.5 py-3 font-medium text-ink no-underline hover:bg-brand-tint hover:text-brand";
-const navLinkActive = "rounded-full bg-brand-tint px-3.5 py-3 font-bold text-brand no-underline";
+const navLink =
+  "rounded-full px-3.5 py-3 font-medium text-ink no-underline hover:bg-brand-tint hover:text-brand";
+const navLinkActive =
+  "rounded-full bg-brand-tint px-3.5 py-3 font-bold text-brand no-underline";
 
 export function Logo() {
   return (
-    <Link href="/" className="text-xl font-extrabold tracking-[0.28em] text-brand no-underline">
+    <Link
+      href="/"
+      className="text-xl font-extrabold tracking-[0.28em] text-brand no-underline"
+    >
       REVIUIT
     </Link>
   );
 }
 
-export function SiteHeader({ search, cta, active, cancelHref }: SiteHeaderProps) {
+export function SiteHeader({
+  search,
+  cta,
+  active,
+  cancelHref,
+}: SiteHeaderProps) {
   return (
     <header className="border-b border-line">
       <div
@@ -55,11 +65,17 @@ export function SiteHeader({ search, cta, active, cancelHref }: SiteHeaderProps)
           </Form>
         )}
         {cancelHref ? (
-          <Link href={cancelHref} className="px-3.5 py-3 font-semibold no-underline">
+          <Link
+            href={cancelHref}
+            className="px-3.5 py-3 font-semibold no-underline"
+          >
             Cancelar
           </Link>
         ) : (
-          <nav aria-label="Principal" className={`flex flex-wrap items-center gap-1 ${search ? "ml-auto" : ""}`}>
+          <nav
+            aria-label="Principal"
+            className={`flex flex-wrap items-center gap-1 ${search ? "ml-auto" : ""}`}
+          >
             <Link
               href="/explorar"
               aria-current={active === "explorar" ? "page" : undefined}
@@ -101,11 +117,6 @@ async function MenuUsuario() {
         Entrar
       </Link>
     );
-  }
-
-  async function salir() {
-    "use server";
-    await signOut({ redirectTo: "/" });
   }
 
   return (

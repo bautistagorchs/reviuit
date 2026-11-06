@@ -1,11 +1,14 @@
 import "server-only";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { auth } from "@/auth";
 
 export type Usuario = { nombre: string; email: string; imagen: string | null };
 
 /** El usuario logueado, o null. Lee la cookie de sesión: usar dentro de un <Suspense>. */
 export async function getUsuario(): Promise<Usuario | null> {
+  // auth() usa crypto antes de leer la request: hay que marcar la render como dinámica primero.
+  await connection();
   const session = await auth();
   const email = session?.user?.email;
   if (!email) return null;
